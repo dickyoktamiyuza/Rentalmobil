@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Items extends Model
 {
@@ -27,6 +28,16 @@ class Items extends Model
     protected $casts = [
         'photos' => 'array',
     ];
+
+    // get first photos  from photo
+
+    public function getThumbnailAttribute()
+    {
+        if ($this->photos) {
+            return Storage::url(json_decode($this->photos)[0]);
+        }
+        return 'https://via.placeholder.com/800x600';
+    }
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brands::class);

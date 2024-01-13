@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\TypeController as AdminTypeController;
+use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Models\Brands;
 
 /*
@@ -33,7 +34,10 @@ Route::prefix('admin')->name('admin.')->middleware([
     Route::post('/brands/{brand}/restore', [AdminBrandController::class, 'restore'])->name('brands.restore');
     Route::delete('/brands/{brand}/deletePermanent', [AdminBrandController::class, 'deletePermanent'])->name('brands.deletePermanent');
     //end brand
+    //type
     Route::resource('/type', AdminTypeController::class);
     Route::post('/type/{type}/restore', [AdminTypeController::class, 'restore'])->name('type.restore');
     Route::delete('/type/{type}/deletePermanent', [AdminTypeController::class, 'deletePermanent'])->name('type.deletePermanent');
+    //end type
+    Route::resource('item', AdminItemController::class);
 });

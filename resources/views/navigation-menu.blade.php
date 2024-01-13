@@ -26,6 +26,11 @@
                         {{ __('Type') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('admin.item.index') }}" :active="request()->routeIs('admin.item.index')">
+                        {{ __('Item') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -168,6 +173,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link href="{{ route('admin.type.index') }}" :active="request()->routeIs('admin.type.index')">
                 {{ __('Type') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('admin.item.index') }}" :active="request()->routeIs('admin.item.index')">
+                {{ __('Item') }}
             </x-responsive-nav-link>
         </div>
 
