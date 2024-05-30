@@ -9,7 +9,7 @@
 Clone Projek
 
 ```bash
-  git clone https://github.com/abdulaziz-m5u/rental-mobil-laravel.git nama_projek
+ https://github.com/dickyoktamiyuza/Rentalmobil.git
 ```
 
 Masuk ke folder dengan perintah
@@ -38,5 +38,5 @@ Masuk ke folder dengan perintah
 
 #### Login
 
--   email = admin@admin.com
--   password = 123
+-   email = admin@example.com
+-   password = password
