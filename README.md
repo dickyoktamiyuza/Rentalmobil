@@ -2,7 +2,7 @@
 
 ## Screenshots
 
-![preview img](/preview.png)
+![Priview img](https://github.com/dickyoktamiyuza/Rentalmobil/blob/main/public/images/SS%20apilikasi.png)
 
 ## Donwload
 
