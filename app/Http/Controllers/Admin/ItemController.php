@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Items;
+use App\Models\Item;
 use App\Models\Types;
 use App\Models\Brands;
 use Illuminate\Support\Str;
@@ -19,7 +19,7 @@ class ItemController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Items::with(['brand', 'type']);
+            $query = Item::with(['brand', 'type']);
 
             return DataTables::of($query)
                 ->addColumn('thumbnail', function ($item) {
@@ -30,10 +30,10 @@ class ItemController extends Controller
                 ->addColumn('action', function ($item) {
                     return '
                         <a class="block w-full px-2 py-1 mb-1 text-xs text-center text-white transition duration-500 bg-gray-700 border border-gray-700 rounded-md select-none ease hover:bg-gray-800 focus:outline-none focus:shadow-outline" 
-                            href="' . route('admin.brands.edit', $item->id) . '">
+                            href="' . route('admin.item.edit', $item->id) . '">
                             Sunting
                         </a>
-                        <form class="block w-full" onsubmit="return confirm(\'Apakah anda yakin?\');" -block" action="' . route('admin.brands.destroy', $item->id) . '" method="POST">
+                        <form class="block w-full" onsubmit="return confirm(\'Apakah anda yakin?\');" -block" action="' . route('admin.item.destroy', $item->id) . '" method="POST">
                         <button class="w-full px-2 py-1 text-xs text-white transition duration-500 bg-red-500 border border-red-500 rounded-md select-none ease hover:bg-red-600 focus:outline-none focus:shadow-outline" >
                             Hapus
                         </button>
@@ -75,12 +75,17 @@ class ItemController extends Controller
             }
             $data['photos'] = json_encode($photos);
         }
-        Items::create($data);
+        // Check if 'star' exists and is not NULL
+        if (!array_key_exists('star', $data)) {
+            $data['star'] = null;
+        }
+
+        Item::create($data);
         return redirect()->route('admin.item.index');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resourc    e.
      */
     public function show(string $id)
     {
@@ -90,24 +95,44 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Item $item)
     {
-        //
+        $item->load('brand', 'type');
+        $brands = Brands::all();
+        $types = Types::all();
+        return view('admin.item.edit', compact('brands', 'types', 'item'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ItemRequest $request, Item $item)
     {
-        //
+        $data = $request->all();
+        // $data['slug'] = Str::slug($data['name']) . '-' . Str::lower(Str::random(5));
+        //upload multiple
+        if ($request->hasFile('photos')) {
+            $photos = [];
+            foreach ($request->file('photos') as $photo) {
+                $photoPath = $photo->store('assets/item', 'public');
+
+                //push array
+                array_push($photos, $photoPath);
+            }
+            $data['photos'] = json_encode($photos);
+        } else {
+            $data['photos'] = $item->photos;
+        }
+        $item->update($data);
+        return redirect()->route('admin.item.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Item $item)
     {
-        //
+        $item->delete();
+        return redirect()->route('admin.item.index')->with('success', 'Brand Berhasil Di Hapus');
     }
 }

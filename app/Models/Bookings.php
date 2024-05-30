@@ -25,15 +25,18 @@ class Bookings extends Model
         'item_id',
         'user_id'
     ];
-    protected $dates = [
-        'start_date',
-        'end_date',
+    protected $casts = [
+
+        'start_date' => 'datetime:Y-m-d',
+
+        'end_date' => 'datetime:Y-m-d'
+
     ];
 
-    public function items()
+    public function item()
 
     {
-        return $this->belongsTo(Items::class);
+        return $this->belongsTo(Item::class);
     }
 
     public function user()
